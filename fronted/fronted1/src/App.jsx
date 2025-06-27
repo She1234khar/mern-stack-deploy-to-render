@@ -36,11 +36,11 @@ function App() {
   // const user=null;
   const {user,isAuthenticated,isLoading}=useSelector(state=>state.auth)
 
-// const dispatch=useDispatch();
+ const dispatch=useDispatch();
 
-// useEffect(()=>{
-//   dispatch(checkAuth());
-// },[dispatch])
+ useEffect(()=>{
+   dispatch(checkAuth());
+ },[dispatch])
 
 if(isLoading) return <div>Loading...</div>
 
