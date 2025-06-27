@@ -49,13 +49,11 @@ if(isLoading) return <div>Loading...</div>
     <div className='flex flex-col overflow-hidden bg-white'>
       
       <Routes>
-  <Route path="/auth" element={
-    <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-    <Layout />
-    </CheckAuth>}>
-    <Route path="login" element={<AuthLogin />} />
-    <Route path="register" element={<AuthRegister />} />
-  </Route>
+      <Route path="/auth" element={<Layout />}>
+  <Route path="login" element={<AuthLogin />} />
+  <Route path="register" element={<AuthRegister />} />
+</Route>
+
   <Route path="/admin" element={
     <CheckAuth isAuthenticated={isAuthenticated} user={user}>
     <AdminLayout/>
