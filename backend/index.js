@@ -54,6 +54,6 @@ app.use('/api/shop/search',shopSearchRouter)
 
 connectDB().then(() => {
   app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+    console.log("Server running at");
   });
 });
