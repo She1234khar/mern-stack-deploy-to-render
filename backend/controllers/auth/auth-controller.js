@@ -37,7 +37,7 @@ const registerUser=async(req,res)=>{
       }
     })
   }catch(error){
-    console.log(error);
+    console.log('Registration error:', error);
     res.status(500).json({
       success:false,
       message:'Internal server error'
@@ -54,6 +54,16 @@ const loginUser=async(req,res)=>{
         message:'Email and password are required'
       })
     }
+
+    // Check if JWT_SECRET is available
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET environment variable is not set');
+      return res.status(500).json({
+        success: false,
+        message: 'Server configuration error'
+      })
+    }
+
     const user=await User.findOne({email});
     if(!user){
       return res.status(400).json({
@@ -85,7 +95,7 @@ const loginUser=async(req,res)=>{
       }
     })
   }catch(error){
-    console.log(error);
+    console.log('Login error:', error);
     res.status(500).json({
       success:false,
       message:'Internal server error'
@@ -101,7 +111,7 @@ const logout=async(req,res)=>{
       message:'Logout successful'
     })
   }catch(error){
-    console.log(error);
+    console.log('Logout error:', error);
     res.status(500).json({
       success:false,
       message:'Internal server error'
@@ -129,7 +139,7 @@ const authMiddleware=async(req,res,next)=>{
     req.user=user;
     next();
   }catch(error){
-    console.log(error);
+    console.log('Auth middleware error:', error);
     res.status(401).json({
       success:false,
       message:'Invalid token'

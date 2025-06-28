@@ -8,29 +8,41 @@ const initialState = {
 }
 
 export const registerUser = createAsyncThunk('/auth/register',
-  async (formData) => {
-    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, formData, {
-      withCredentials: true
-    })
-    return response.data;
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, formData, {
+        withCredentials: true
+      })
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || { success: false, message: 'Registration failed' });
+    }
   }
 )
 
 export const loginUser = createAsyncThunk('/auth/login',
-  async (formData) => {
-    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, formData, {
-      withCredentials: true
-    })
-    return response.data;
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, formData, {
+        withCredentials: true
+      })
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || { success: false, message: 'Login failed' });
+    }
   }
 )
 
 export const logoutUser = createAsyncThunk('/auth/logout',
-  async () => {
-    const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {}, {
-      withCredentials: true
-    })
-    return response.data;
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {}, {
+        withCredentials: true
+      })
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || { success: false, message: 'Logout failed' });
+    }
   }
 )
 
@@ -71,10 +83,11 @@ const authSlice = createSlice({
         state.user = action.payload.success ? action.payload.user : null;
         state.isAuthenticated = action.payload.success ? true : false;
       })
-      .addCase(registerUser.rejected, (state) => {
+      .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;
+        console.error('Registration error:', action.payload);
       })
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
@@ -84,10 +97,11 @@ const authSlice = createSlice({
         state.user = action.payload.success ? action.payload.user : null;
         state.isAuthenticated = action.payload.success;
       })
-      .addCase(loginUser.rejected, (state) => {
+      .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;
+        console.error('Login error:', action.payload);
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.isAuthenticated = false;
@@ -102,10 +116,11 @@ const authSlice = createSlice({
         state.user = action.payload.success ? action.payload.user : null;
         state.isAuthenticated = action.payload.success ? true : false;
       })
-      .addCase(checkAuthStatus.rejected, (state) => {
+      .addCase(checkAuthStatus.rejected, (state, action) => {
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;
+        console.error('Auth check error:', action.payload);
       })
   }
 })
