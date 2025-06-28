@@ -40,6 +40,13 @@ export const getOrderDetails=createAsyncThunk('/order/getOrderDetails ',async (i
 
 })
 
+export const cancelOrder =createAsyncThunk('/order/cancelOrder ',async (orderId)=>{
+  const response= await axios.post(`${import.meta.env.VITE_API_URL}/api/shop/order/cancel`,{orderId})
+
+  return response.data;
+
+})
+
 
 
 
@@ -90,6 +97,21 @@ const shoppingOrderSlice=createSlice({
       .addCase(getOrderDetails.rejected, (state) => {
         state.isLoading = false;
         state.orderDetails = null;
+        })
+      .addCase(cancelOrder.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(cancelOrder.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (state.orderList.length > 0) {
+          const orderIndex = state.orderList.findIndex(order => order._id === action.payload.data._id);
+          if (orderIndex !== -1) {
+            state.orderList[orderIndex] = action.payload.data;
+          }
+        }
+      })
+      .addCase(cancelOrder.rejected, (state) => {
+        state.isLoading = false;
         })
   }
 });

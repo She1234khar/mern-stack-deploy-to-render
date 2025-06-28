@@ -197,11 +197,44 @@ const getOrderDetails = async (req, res) => {
   }
 }
 
+const cancelOrder = async (req, res) => {
+  try {
+    const { orderId } = req.body;
+    
+    let order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found',
+      });
+    }
 
+    // Update order status to cancelled
+    order.orderStatus = 'cancelled';
+    order.paymentStatus = 'cancelled';
+    order.orderUpdateDate = new Date();
+
+    await order.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Order cancelled successfully',
+      data: order,
+    });
+
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({
+      success: false,
+      message: 'Some error occurred while cancelling order!',
+    });
+  }
+};
 
 module.exports = {
   createOrder,
   capturePayment,
   getAllOrdersByUser,
   getOrderDetails,
+  cancelOrder,
 };

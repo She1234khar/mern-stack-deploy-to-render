@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { checkAuthStatus } from "./store/auth-slice/slice";
 import PaypalReturn from "./pages/shopping-view/paypal-return";
+import PaypalCancel from "./pages/shopping-view/paypal-cancel";
 import PaymentSuccess from "./pages/shopping-view/payment-success";
 import SearchPage from "./pages/shopping-view/search";
 //import { Skeleton } from "@/components/ui/skeleton"
@@ -78,6 +79,7 @@ if(isLoading) return <div>Loading...</div>
           <Route path="listing" element={<ShoppingListin />} />
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="paypal-return" element={<PaypalReturn/>}/>
+          <Route path="paypal-cancel" element={<PaypalCancel/>}/>
           <Route path="payment-success" element={<PaymentSuccess/>}/>
           <Route path="search" element={<SearchPage/>}/>
         </Route>
