@@ -67,10 +67,10 @@ app.get('/api/*', (req, res) => {
   res.status(404).json({ message: 'API route not found' });
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
-});
-console.log('12')
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(frontendPath, 'index.html'));
+// });
+// console.log('12')
 
 
 connectDB().then(() => {
