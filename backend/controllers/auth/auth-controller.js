@@ -45,17 +45,16 @@ const registerUser=async(req,res)=>{
   }
 }
 
-const loginUser=async(req,res)=>{
-  try{
-    const {email,password}=req.body;
-    if(!email || !password){
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
       return res.status(400).json({
-        success:false,
-        message:'Email and password are required'
+        success: false,
+        message: 'Email and password are required'
       })
     }
 
-    // Check if JWT_SECRET is available
     if (!process.env.JWT_SECRET) {
       console.error('JWT_SECRET environment variable is not set');
       return res.status(500).json({
@@ -64,41 +63,42 @@ const loginUser=async(req,res)=>{
       })
     }
 
-    const user=await User.findOne({email});
-    if(!user){
+    const user = await User.findOne({ email });
+    if (!user) {
       return res.status(400).json({
-        success:false,
-        message:'User not found'
+        success: false,
+        message: 'User not found'
       })
     }
-    const isPasswordValid=await bcrypt.compare(password,user.password);
-    if(!isPasswordValid){
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
       return res.status(400).json({
-        success:false,
-        message:'Invalid password'
+        success: false,
+        message: 'Invalid password'
       })
     }
-    const token=jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:'7d'});
-    res.cookie('token',token,{
-      httpOnly:true,
-      secure:process.env.NODE_ENV==='production',
-      maxAge:7*24*60*60*1000
-    })
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,         // Always true on Render
+      sameSite: 'None',     // Important for cross-site cookies
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
     res.status(200).json({
-      success:true,
-      message:'Login successful',
-      user:{
-        id:user._id,
-        userName:user.userName,
-        email:user.email,
-        role:user.role
+      success: true,
+      message: 'Login successful',
+      user: {
+        id: user._id,
+        userName: user.userName,
+        email: user.email,
+        role: user.role
       }
     })
-  }catch(error){
+  } catch (error) {
     console.log('Login error:', error);
     res.status(500).json({
-      success:false,
-      message:'Internal server error'
+      success: false,
+      message: 'Internal server error'
     })
   }
 }
