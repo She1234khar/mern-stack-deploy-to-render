@@ -63,6 +63,10 @@ console.log('9')
 const frontendPath = path.join(__dirname, '..', 'fronted', 'fronted1', 'dist');
 app.use(express.static(frontendPath));
 console.log('10');
+app.get('/api/*', (req, res) => {
+  res.status(404).json({ message: 'API route not found' });
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
