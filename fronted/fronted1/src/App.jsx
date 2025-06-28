@@ -17,7 +17,7 @@ import CheckAuth from "./components/common/check-auth";
 import Unauth from "./pages/unauth-page/unauth";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { checkAuth } from "./store/auth-slice/slice";
+import { checkAuthStatus } from "./store/auth-slice/slice";
 import PaypalReturn from "./pages/shopping-view/paypal-return";
 import PaymentSuccess from "./pages/shopping-view/payment-success";
 import SearchPage from "./pages/shopping-view/search";
@@ -39,7 +39,7 @@ function App() {
  const dispatch=useDispatch();
 
  useEffect(()=>{
-   dispatch(checkAuth());
+   dispatch(checkAuthStatus());
  },[dispatch])
 
 if(isLoading) return <div>Loading...</div>
