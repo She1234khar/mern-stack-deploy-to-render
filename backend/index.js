@@ -71,19 +71,6 @@ console.log('9')
 //   res.sendFile(path.join(frontendPath, 'index.html'));
 // });
 // console.log('12')
-const frontendPath = path.join(__dirname, '..', 'fronted', 'fronted1', 'dist');
-app.use(express.static(frontendPath));
-console.log('10');
-
-app.get('/api/*', (req, res) => {
-  res.status(404).json({ message: 'API route not found' });
-});
-
-// ✅ Safe frontend fallback route (for React Router)
-app.get(/^\/(?!api).*/, (req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
-});
-console.log('12');
 
 
 connectDB().then(() => {
