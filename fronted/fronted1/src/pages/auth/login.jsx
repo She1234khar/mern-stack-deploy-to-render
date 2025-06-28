@@ -1,11 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginFormControls } from "../../config/pt";
 import { toast } from "sonner";
-
 import CommonForm from "../../components/common/form";
-
-import { useState } from 'react';
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "@/store/auth-slice/slice";
 
 const initialState = {
@@ -16,11 +14,23 @@ const initialState = {
 export default function AuthLogin() {
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // Redux state se auth status lo
+  const { isAuthenticated, isLoading } = useSelector(state => state.auth);
+
+  // Login ke baad turant redirect karo
+  useEffect(() => {
+    if (isAuthenticated && !isLoading) {
+      navigate("/shop/home", { replace: true });
+    }
+  }, [isAuthenticated, isLoading, navigate]);
 
   function onSubmit() {
     dispatch(loginUser(formData)).then((data) => {
       if (data?.payload?.success) {
         toast.success(data?.payload?.message || 'Login successful');
+        // Yahan redirect ki zarurat nahi, useEffect handle karega
       } else {
         toast.error(data?.payload?.message || 'Login failed. Please try again.');
       }
