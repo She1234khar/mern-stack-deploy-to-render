@@ -9,7 +9,7 @@ router.post('/logout',logout);
 router.get('/check-auth',authMiddleware,(req,res)=>{
   const user=req.user;
   res.status(200).send({
-    succes:true,
+    success:true,
     message:'Authenticated user!',
     user
   })

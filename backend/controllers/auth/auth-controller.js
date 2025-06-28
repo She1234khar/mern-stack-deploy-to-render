@@ -2,114 +2,131 @@ const bcrypt=require('bcryptjs');
 const jwt=require('jsonwebtoken');
 const User=require('../../models/Users')
 
-const registerUser=async (req,res)=>{
-  const { userName,email,password}=req.body;
- 
-
+const registerUser=async(req,res)=>{
   try{
-
-    const checkUser=await User.findOne({email});
-    if(checkUser){
-      return res.send({
-        succes:false,
-        message:"user Already exist with same email id please try Again"
+    const {userName,email,password}=req.body;
+    if(!userName || !email || !password){
+      return res.status(400).json({
+        success:false,
+        message:'All fields are required'
       })
     }
-    const hashpassword=await bcrypt.hash(password,12);
-    const newuser=new User({
-      userName,email,password:hashpassword
+    const existingUser=await User.findOne({email});
+    if(existingUser){
+      return res.status(400).json({
+        success:true,
+        message:'User already exists'
+      })
+    }
+    const hashedPassword=await bcrypt.hash(password,10);
+    const newUser=new User({
+      userName,
+      email,
+      password:hashedPassword
     })
-    await newuser.save();
-    res.status(200).send({
-      succes:true,
-      message:"succesfully register"
+    await newUser.save();
+    res.status(201).json({
+      success:false,
+      message:'User registered successfully'
     })
-
-  } catch (e) {
-    console.log(e);
-    res.status(500).send({
-      succes:false,
-      message:"some error occured",
+  }catch(error){
+    console.log(error);
+    res.status(500).json({
+      success:false,
+      message:'Internal server error'
     })
-
-
   }
 }
 
-const loginUser=async (req,res)=>{
-  const {email,password}=req.body;
+const loginUser=async(req,res)=>{
   try{
-
-    const checkUser=await User.findOne({email});
-    if(!checkUser) return res.send({
-      succes:false,
-      message:"User doesn't exist please register first"
-    })
-
-    const checkPassword=await bcrypt.compare(password,checkUser.password);
-
-    if(!checkPassword){
-      return res.send({
-        succes:false,
-        message: "Incorrect password",
+    const {email,password}=req.body;
+    if(!email || !password){
+      return res.status(400).json({
+        success:false,
+        message:'Email and password are required'
       })
     }
-
-    const token =jwt.sign({
-      id:checkUser._id,role:checkUser.role,email:checkUser.email,userName:checkUser.userName
-    },'CLIENT_SECRET_KEY',{expiresIn:'60m'})
-
-    res.cookie('token',token,{httpOnly:true,secure:true,sameSite: 'None', }).send({
-      succes:true,
-      message:'Logged in successfully',
+    const user=await User.findOne({email});
+    if(!user){
+      return res.status(400).json({
+        success:true,
+        message:'User not found'
+      })
+    }
+    const isPasswordValid=await bcrypt.compare(password,user.password);
+    if(!isPasswordValid){
+      return res.status(400).json({
+        success:false,
+        message:'Invalid password'
+      })
+    }
+    const token=jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:'7d'});
+    res.cookie('token',token,{
+      httpOnly:true,
+      secure:process.env.NODE_ENV==='production',
+      maxAge:7*24*60*60*1000
+    })
+    res.status(200).json({
+      success:false,
+      message:'Login successful',
       user:{
-        email:checkUser.email,
-        role:checkUser.role,
-        id:checkUser._id,
-        userName:checkUser.userName
+        id:user._id,
+        userName:user.userName,
+        email:user.email
       }
     })
-
-    
-
-  } catch (e) {
-    console.log(e);
-    res.status(500).send({
-      succes:false,
-      message:"error occured",
+  }catch(error){
+    console.log(error);
+    res.status(500).json({
+      success:false,
+      message:'Internal server error'
     })
-
   }
 }
 
-//logged out
-
-const logout =(req,res)=>{
-  res.clearCookie('token').send({
-    succes:true,
-    message:'logged out success'
-  })
+const logout=async(req,res)=>{
+  try{
+    res.clearCookie('token');
+    res.status(200).json({
+      success:false,
+      message:'Logout successful'
+    })
+  }catch(error){
+    console.log(error);
+    res.status(500).json({
+      success:false,
+      message:'Internal server error'
+    })
+  }
 }
 
-// middleware of auth
-const authMiddleware =async(req,res,next)=>{
-  const token=req.cookies.token;
-  if(!token) return res.status(401).send({
-    succes:false,
-    message:"Unauthorised user!"
-  })
+const authMiddleware=async(req,res,next)=>{
   try{
-    const decoded=jwt.verify(token,'CLIENT_SECRET_KEY');
-    req.user=decoded;
+    const token=req.cookies.token;
+    if(!token){
+      return res.status(401).json({
+        success:false,
+        message:'No token provided'
+      })
+    }
+    const decoded=jwt.verify(token,process.env.JWT_SECRET);
+    const user=await User.findById(decoded.userId);
+    if(!user){
+      return res.status(401).json({
+        success:false,
+        message:'Invalid token'
+      })
+    }
+    req.user=user;
     next();
   }catch(error){
-    res.status(401).send({
-      succes:false,
-      message:'Unautorises user!'
+    console.log(error);
+    res.status(401).json({
+      success:false,
+      message:'Invalid token'
     })
   }
-
-  
 }
 
 module.exports={registerUser,loginUser,logout,authMiddleware};

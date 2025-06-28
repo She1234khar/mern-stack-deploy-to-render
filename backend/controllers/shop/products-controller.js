@@ -36,7 +36,7 @@ const getFilteredProducts = async (req, res) => {
     const products= await Product.find(filters).sort(sort);
 
     res.status(200).json({
-      succes : true,
+      success: true,
       data :products
     })
   } catch (error) {

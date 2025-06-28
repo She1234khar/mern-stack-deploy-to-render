@@ -1,4 +1,3 @@
-
 const product=require('../../models/Product')
 
 const searchProducts=async(req,res)=>{
@@ -28,7 +27,7 @@ const searchProducts=async(req,res)=>{
   }catch(error){
     console.log(error)
     res.status(500).json({
-      succes:false,
+      success:false,
       message:'error'
     })
   }
