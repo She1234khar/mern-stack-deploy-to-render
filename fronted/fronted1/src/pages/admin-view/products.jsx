@@ -53,7 +53,7 @@ function onSubmit(){
     console.log(data,'edit');
 
 
-    if(data.payload.succes){
+    if(data.payload.success){
       dispatch(fetchAllProducts);
       setFormData(initialFormData);
       setOpenCreateProductsDialog(false);
@@ -67,20 +67,18 @@ function onSubmit(){
     ...formData,
     image:uploadedImageUrl,
     totalStock: formData.totalStock !== '' ? Number(formData.totalStock) : 0,
-
-  })).then((data)=>{
-    console.log(data);
-    if(data.payload.succes){
-      dispatch(fetchAllProducts());
-      setOpenCreateProductsDialog(false);
-      setImageFile(null);
+    price: Number(formData.price),
+    salePrice: formData.salePrice !== '' ? Number(formData.salePrice) : 0,
+  })).then((data) => {
+    console.log(data, 'add');
+    if(data.payload.success){
+      dispatch(fetchAllProducts);
       setFormData(initialFormData);
-      toast.success("product add succesfully");
+      setOpenCreateProductsDialog(false);
+      setUploadedImageUrl('');
+      toast.success("product add successfully");
     }
-  })
-
-  
-
+  });
 }
 // function isFormValid(){
 //   return object.keys(formData).map((key)=>formdata[key]!=="")

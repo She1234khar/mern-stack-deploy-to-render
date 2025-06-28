@@ -21,7 +21,7 @@ const initialState={
 function onSubmit(){
   // event.preventDefault();
   dispatch(loginUser(formData)).then((data)=>{
-    if(data?.payload?.succes){
+    if(data?.payload?.success){
       toast.success(data?.payload.message);
     }
     else{

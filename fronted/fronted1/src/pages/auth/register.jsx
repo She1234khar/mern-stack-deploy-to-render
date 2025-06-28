@@ -25,7 +25,7 @@ function onSubmit(){
 //console.log(formData);
 //event.preventDefault();
 dispatch(registerUser(formData)).then((data)=>{
-  if(data?.payload?.succes) {
+  if(data?.payload?.success) {
     
     toast.success(data?.payload.message);
 
