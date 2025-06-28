@@ -103,19 +103,24 @@ const loginUser = async (req, res) => {
   }
 }
 
-const logout=async(req,res)=>{
-  try{
-    res.clearCookie('token');
+const logout = async (req, res) => {
+  try {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None',
+      path: '/', // path zaroori hai!
+    });
     res.status(200).json({
-      success:true,
-      message:'Logout successful'
-    })
-  }catch(error){
+      success: true,
+      message: 'Logout successful'
+    });
+  } catch (error) {
     console.log('Logout error:', error);
     res.status(500).json({
-      success:false,
-      message:'Internal server error'
-    })
+      success: false,
+      message: 'Internal server error'
+    });
   }
 }
 
