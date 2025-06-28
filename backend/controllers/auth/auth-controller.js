@@ -14,7 +14,7 @@ const registerUser=async(req,res)=>{
     const existingUser=await User.findOne({email});
     if(existingUser){
       return res.status(400).json({
-        success:true,
+        success:false,
         message:'User already exists'
       })
     }
@@ -22,12 +22,19 @@ const registerUser=async(req,res)=>{
     const newUser=new User({
       userName,
       email,
-      password:hashedPassword
+      password:hashedPassword,
+      role: 'user' // Default role
     })
     await newUser.save();
     res.status(201).json({
-      success:false,
-      message:'User registered successfully'
+      success:true,
+      message:'User registered successfully',
+      user: {
+        id: newUser._id,
+        userName: newUser.userName,
+        email: newUser.email,
+        role: newUser.role
+      }
     })
   }catch(error){
     console.log(error);
@@ -50,7 +57,7 @@ const loginUser=async(req,res)=>{
     const user=await User.findOne({email});
     if(!user){
       return res.status(400).json({
-        success:true,
+        success:false,
         message:'User not found'
       })
     }
@@ -68,12 +75,13 @@ const loginUser=async(req,res)=>{
       maxAge:7*24*60*60*1000
     })
     res.status(200).json({
-      success:false,
+      success:true,
       message:'Login successful',
       user:{
         id:user._id,
         userName:user.userName,
-        email:user.email
+        email:user.email,
+        role:user.role
       }
     })
   }catch(error){
@@ -89,7 +97,7 @@ const logout=async(req,res)=>{
   try{
     res.clearCookie('token');
     res.status(200).json({
-      success:false,
+      success:true,
       message:'Logout successful'
     })
   }catch(error){

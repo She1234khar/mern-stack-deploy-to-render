@@ -1,19 +1,18 @@
-import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
-const initialState={
-  isAuthenticated :false,
-  isLoading :true,
-  user :null
+const initialState = {
+  isAuthenticated: false,
+  isLoading: true,
+  user: null
 }
+
 export const registerUser = createAsyncThunk('/auth/register',
   async (formData) => {
     const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, formData, {
       withCredentials: true
     })
     return response.data;
-
   }
 )
 
@@ -23,7 +22,6 @@ export const loginUser = createAsyncThunk('/auth/login',
       withCredentials: true
     })
     return response.data;
-
   }
 )
 
@@ -33,17 +31,23 @@ export const logoutUser = createAsyncThunk('/auth/logout',
       withCredentials: true
     })
     return response.data;
-
   }
 )
 
 export const checkAuthStatus = createAsyncThunk('/auth/check',
-  async () => {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/check-auth`, {
-      withCredentials: true
-    })
-    return response.data;
-
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/check-auth`, {
+        withCredentials: true
+      })
+      return response.data;
+    } catch (error) {
+      // Don't treat 401 as an error - it just means user is not logged in
+      if (error.response?.status === 401) {
+        return rejectWithValue({ success: false, message: 'Not authenticated' });
+      }
+      return rejectWithValue(error.response?.data || { success: false, message: 'Network error' });
+    }
   }
 )
 
@@ -65,7 +69,7 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.success ? action.payload.user : null;
-        state.isAuthenticated=action.payload.success ? true :false;
+        state.isAuthenticated = action.payload.success ? true : false;
       })
       .addCase(registerUser.rejected, (state) => {
         state.isLoading = false;
@@ -78,7 +82,7 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.success ? action.payload.user : null;
-        state.isAuthenticated=action.payload.success;
+        state.isAuthenticated = action.payload.success;
       })
       .addCase(loginUser.rejected, (state) => {
         state.isLoading = false;

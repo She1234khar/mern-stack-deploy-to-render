@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Layout from "./components/auth/Layout";
 import AuthLogin from "./pages/auth/login";
 import AuthRegister from "./pages/auth/register";
@@ -49,38 +49,42 @@ if(isLoading) return <div>Loading...</div>
     <div className='flex flex-col overflow-hidden bg-white'>
       
       <Routes>
-      <Route path="/auth" element={<Layout />}>
-  <Route path="login" element={<AuthLogin />} />
-  <Route path="register" element={<AuthRegister />} />
-</Route>
+        {/* Default route - redirect to appropriate page based on auth status */}
+        <Route path="/" element={
+          isAuthenticated ? <Navigate to="/shop/home" replace /> : <Navigate to="/auth/login" replace />
+        } />
 
-  <Route path="/admin" element={
-    <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-    <AdminLayout/>
-    </CheckAuth>}>
-  <Route path="dashboard" element={<AdminDashBoard/>} />
-  <Route path="feature" element={<AdminFeature/>} />
-  <Route path="orders" element={<AdminOrders/>} />
-  <Route path="product" element={<AdminProducts/>} />
-  </Route>
-  <Route path="/shop" element={
-  <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-    <ShoppingLayout />
-  </CheckAuth>
-}>
-  <Route path="home" element={<ShoppingHome />} />
-  <Route path="checkout" element={<ShoppingCheckout />} />
-  <Route path="listing" element={<ShoppingListin />} />
-  <Route path="account" element={<ShoppingAccount />} />
-  <Route path="paypal-return" element={<PaypalReturn/>}/>
-  <Route path="payment-success" element={<PaymentSuccess/>}/>
-  <Route path="search" element={<SearchPage/>}/>
-</Route>
+        <Route path="/auth" element={<Layout />}>
+          <Route path="login" element={<AuthLogin />} />
+          <Route path="register" element={<AuthRegister />} />
+        </Route>
 
+        <Route path="/admin" element={
+          <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+            <AdminLayout/>
+          </CheckAuth>}>
+          <Route path="dashboard" element={<AdminDashBoard/>} />
+          <Route path="feature" element={<AdminFeature/>} />
+          <Route path="orders" element={<AdminOrders/>} />
+          <Route path="product" element={<AdminProducts/>} />
+        </Route>
+        <Route path="/shop" element={
+          <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+            <ShoppingLayout />
+          </CheckAuth>
+        }>
+          <Route path="home" element={<ShoppingHome />} />
+          <Route path="checkout" element={<ShoppingCheckout />} />
+          <Route path="listing" element={<ShoppingListin />} />
+          <Route path="account" element={<ShoppingAccount />} />
+          <Route path="paypal-return" element={<PaypalReturn/>}/>
+          <Route path="payment-success" element={<PaymentSuccess/>}/>
+          <Route path="search" element={<SearchPage/>}/>
+        </Route>
 
-  <Route path="/unauth" element={<Unauth/>}></Route>
-  <Route path="*" element={<Tr/>}/>
-</Routes>
+        <Route path="/unauth" element={<Unauth/>}></Route>
+        <Route path="*" element={<Tr/>}/>
+      </Routes>
 
     </div>
   );
