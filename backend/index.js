@@ -62,10 +62,11 @@ app.use('/api/shop/search',shopSearchRouter)
 console.log('9')
 const frontendPath = path.join(__dirname, '..', 'fronted', 'fronted1', 'dist');
 app.use(express.static(frontendPath));
-
+console.log('10');
 app.get('*', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
+console.log('10')
 
 
 connectDB().then(() => {
