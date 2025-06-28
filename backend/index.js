@@ -71,6 +71,19 @@ console.log('9')
 //   res.sendFile(path.join(frontendPath, 'index.html'));
 // });
 // console.log('12')
+const frontendPath = path.join(__dirname, '..', 'fronted', 'fronted1', 'dist');
+app.use(express.static(frontendPath)); // Serve static files
+
+// API not found fallback
+app.get('/api/*', (req, res) => {
+  res.status(404).json({ message: 'API route not found' });
+});
+
+// Final fallback: React router
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
+
 
 
 connectDB().then(() => {
