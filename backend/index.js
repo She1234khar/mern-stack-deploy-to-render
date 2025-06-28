@@ -57,7 +57,6 @@ app.use('/api/shop/address', shopAddressRouter);
 console.log('7')
 app.use('/api/shop/order', shopOrderRouter);
 console.log('8')
-
 app.use('/api/shop/search',shopSearchRouter)
 console.log('9')
 const frontendPath = path.join(__dirname, '..', 'fronted', 'fronted1', 'dist');
