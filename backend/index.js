@@ -42,15 +42,24 @@ app.use(cors({
   credentials: true
 }));
 // app.use(cookieParser());
+console.log('1')
 app.use('/api/auth',authrouter);
+console.log('2')
 app.use('/api/admin/products',adminproductroutes);
+console.log('3')
 app.use('/api/admin/order',adminOrdersroutes);
+console.log('4')
 app.use('/api/shop/products',shopProductsRouter);
+console.log('5')
 app.use('/api/shop/cart',shopCartsRouter);
+console.log('6')
 app.use('/api/shop/address', shopAddressRouter);
+console.log('7')
 app.use('/api/shop/order', shopOrderRouter);
+console.log('8')
 
 app.use('/api/shop/search',shopSearchRouter)
+console.log('9')
 const frontendPath = path.join(__dirname, '..', 'fronted', 'fronted1', 'dist');
 app.use(express.static(frontendPath));
 
