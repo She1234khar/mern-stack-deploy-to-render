@@ -70,7 +70,7 @@ app.get('/api/*', (req, res) => {
 app.get('*', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
-console.log('11')
+console.log('12')
 
 
 connectDB().then(() => {
