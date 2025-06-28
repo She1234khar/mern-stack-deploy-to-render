@@ -7,12 +7,19 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependency directories
 node_modules
+
+# Build output (global, ignored unless whitelisted below)
 dist
 dist-ssr
 *.local
 
-# Editor directories and files
+# Explicitly keep the frontend build folder
+!fronted/fronted1/dist/
+!fronted/fronted1/dist/**
+
+# IDEs and editors
 .vscode/*
 !.vscode/extensions.json
 .idea
