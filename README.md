@@ -1,9 +1,10 @@
 # 🛒 E-Commerce Website  
 
-![Stars](https://img.shields.io/github/stars/your-username/your-repo-name?style=social)  
-![Forks](https://img.shields.io/github/forks/your-username/your-repo-name?style=social)  
-![Issues](https://img.shields.io/github/issues/your-username/your-repo-name)  
-![License](https://img.shields.io/github/license/your-username/your-repo-name)  
+![Stars](https://img.shields.io/github/stars/She1234khar/mern-stack-deploy-to-render?style=social)  
+![Forks](https://img.shields.io/github/forks/She1234khar/mern-stack-deploy-to-render?style=social)  
+![Issues](https://img.shields.io/github/issues/She1234khar/mern-stack-deploy-to-render)  
+![License](https://img.shields.io/github/license/She1234khar/mern-stack-deploy-to-render)  
+ 
 
 A full-stack E-Commerce web application built with React, TailwindCSS, ShadCN, Express.js, and MongoDB.  
 It provides modern UI/UX, secure backend APIs, and essential shopping features.  
@@ -38,6 +39,7 @@ It provides modern UI/UX, secure backend APIs, and essential shopping features.
 ### 1️⃣ Clone the Repository
 
 git clone https://github.com/She1234khar/mern-stack-deploy-to-render.git
+
 cd mern-stack-deploy-to-render
 
 2️⃣ Install Dependencies
@@ -56,9 +58,13 @@ npm install
 Create a .env file in server folder and add:
 
 PORT=5000
+
 MONGO_URI=your-mongodb-uri
+
 JWT_SECRET=your-secret-key
+
 PAYPAL_KEY=your-paypal-secret-key
+
 
 4️⃣ Run the App
 
