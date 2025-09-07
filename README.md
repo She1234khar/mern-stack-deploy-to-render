@@ -47,14 +47,17 @@ cd mern-stack-deploy-to-render
 Frontend:
 
 cd fronted/fronted1
+
 npm install
 
 Backend:
 
 cd backend
+
 npm install
 
 3️⃣ Setup Environment Variables
+
 Create a .env file in server folder and add:
 
 PORT=5000
@@ -69,12 +72,15 @@ PAYPAL_KEY=your-paypal-secret-key
 4️⃣ Run the App
 
 Backend:
+
 cd backend
+
 npm start
 
 Frontend:
 
 cd fronted/fronted1
+
 npm start
 
 ## 📸 Screenshots  
