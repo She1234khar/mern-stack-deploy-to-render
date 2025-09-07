@@ -3,7 +3,7 @@
 ![Stars](https://img.shields.io/github/stars/She1234khar/mern-stack-deploy-to-render?style=social)  
 ![Forks](https://img.shields.io/github/forks/She1234khar/mern-stack-deploy-to-render?style=social)  
 ![Issues](https://img.shields.io/github/issues/She1234khar/mern-stack-deploy-to-render)  
-![License](https://img.shields.io/github/license/She1234khar/mern-stack-deploy-to-render)  
+ 
  
 
 A full-stack E-Commerce web application built with React, TailwindCSS, ShadCN, Express.js, and MongoDB.  
